@@ -68,7 +68,7 @@ fn compute_1(
     _, Some(range) -> {
       let #(id, range) = range_next(range)
       case is_invalid(id) {
-        False -> compute_1(ranges, range, total,is_invalid)
+        False -> compute_1(ranges, range, total, is_invalid)
         True -> compute_1(ranges, range, total + id, is_invalid)
       }
     }
@@ -103,16 +103,17 @@ fn is_invalid_2(id: Int) -> Bool {
     1 -> False
     2 -> id % 11 == 0
     3 -> id % 111 == 0
-    4 -> bool.or(id % 1111 == 0, id / 100 == id % 100) 
-    5 -> id % 11111 == 0
+    4 -> bool.or(id % 1111 == 0, id / 100 == id % 100)
+    5 -> id % 11_111 == 0
     _ -> {
       let digits = string.to_graphemes(digits)
-      
+
       list.range(1, length - 1)
-      |> list.any(fn (span) {
+      |> list.any(fn(span) {
         case length % span {
           0 -> {
-            {list.sized_chunk(digits, span) |> list.unique |> list.length} == 1
+            { list.sized_chunk(digits, span) |> list.unique |> list.length }
+            == 1
           }
           _ -> False
         }
