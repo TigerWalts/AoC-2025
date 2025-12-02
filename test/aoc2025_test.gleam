@@ -6,8 +6,8 @@ pub fn main() -> Nil {
 }
 
 pub fn day1_test() {
-  assert day1.part_1(
-      "L68
+  let input =
+    "L68
 L30
 R48
 L5
@@ -16,7 +16,7 @@ L55
 L1
 L99
 R14
-L82",
-    )
-    == 3
+L82"
+  assert day1.part_1(input) == 3
+  assert day1.part_2(input) == 6
 }
