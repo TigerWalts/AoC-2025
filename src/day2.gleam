@@ -1,3 +1,4 @@
+import gleam/bool
 import gleam/int
 import gleam/list
 import gleam/option.{type Option, None, Some}
@@ -26,7 +27,7 @@ fn range_next(range: Range) -> #(Int, Option(Range)) {
 
 pub fn part_1(input: String) -> Int {
   parse_1(input)
-  |> compute_1(None, 0)
+  |> compute_1(None, 0, is_invalid_1)
 }
 
 fn parse_1(input: String) -> List(Range) {
@@ -59,15 +60,16 @@ fn compute_1(
   ranges: List(Range),
   current_range: Option(Range),
   total: Int,
+  is_invalid: fn(Int) -> Bool,
 ) -> Int {
   case ranges, current_range {
     [], None -> total
-    [range, ..rest], None -> compute_1(rest, Some(range), total)
+    [range, ..rest], None -> compute_1(rest, Some(range), total, is_invalid)
     _, Some(range) -> {
       let #(id, range) = range_next(range)
-      case is_invalid_1(id) {
-        False -> compute_1(ranges, range, total)
-        True -> compute_1(ranges, range, total + id)
+      case is_invalid(id) {
+        False -> compute_1(ranges, range, total,is_invalid)
+        True -> compute_1(ranges, range, total + id, is_invalid)
       }
     }
   }
@@ -85,6 +87,36 @@ fn is_invalid_1(id: Int) -> Bool {
         |> list.split(length / 2)
 
       left == right
+    }
+  }
+}
+
+pub fn part_2(input: String) -> Int {
+  parse_1(input)
+  |> compute_1(None, 0, is_invalid_2)
+}
+
+fn is_invalid_2(id: Int) -> Bool {
+  let digits = int.to_string(id)
+  let length = string.length(digits)
+  case length {
+    1 -> False
+    2 -> id % 11 == 0
+    3 -> id % 111 == 0
+    4 -> bool.or(id % 1111 == 0, id / 100 == id % 100) 
+    5 -> id % 11111 == 0
+    _ -> {
+      let digits = string.to_graphemes(digits)
+      
+      list.range(1, length - 1)
+      |> list.any(fn (span) {
+        case length % span {
+          0 -> {
+            {list.sized_chunk(digits, span) |> list.unique |> list.length} == 1
+          }
+          _ -> False
+        }
+      })
     }
   }
 }
