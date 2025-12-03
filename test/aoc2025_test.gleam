@@ -37,4 +37,5 @@ pub fn day3_test() {
 234234234234278
 818181911112111"
   assert day3.part_1(input) == 357
+  assert day3.part_2(input) == 3_121_910_778_619
 }

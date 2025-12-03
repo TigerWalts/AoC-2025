@@ -48,3 +48,37 @@ fn compute_1(rows: List(List(Int)), total: Int) -> Int {
     }
   }
 }
+
+pub fn part_2(input: String) -> Int {
+  parse_1(input)
+  |> compute_2(0)
+}
+
+fn compute_2(rows: List(List(Int)), total: Int) -> Int {
+  case rows {
+    [] -> total
+    [row, ..rest] -> {
+      let #(value, _) =
+        list.range(12, 1)
+        |> list.fold(#(0, row), fn(acc, left) {
+          let #(value, nums) = acc
+          let value = value * 10
+
+          let biggest =
+            nums
+            |> list.reverse
+            |> list.drop(left - 1)
+            |> list.fold(1, int.max)
+
+          let remaining =
+            nums
+            |> list.drop_while(fn(num) { num != biggest })
+            |> list.drop(1)
+
+          #(value + biggest, remaining)
+        })
+
+      compute_2(rest, total + value)
+    }
+  }
+}

@@ -13,7 +13,7 @@ pub fn main() -> Nil {
     ["day2", "part1", filepath] -> get_file_content(filepath) |> day2.part_1
     ["day2", "part2", filepath] -> get_file_content(filepath) |> day2.part_2
     ["day3", "part1", filepath] -> get_file_content(filepath) |> day3.part_1
-    // ["day3", "part2", filepath] -> get_file_content(filepath) |> day3.part_2
+    ["day3", "part2", filepath] -> get_file_content(filepath) |> day3.part_2
     _ -> panic as "Unknown commands"
   }
   |> int.to_string
