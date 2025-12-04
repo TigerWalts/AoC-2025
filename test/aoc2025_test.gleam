@@ -54,5 +54,5 @@ pub fn day4_test() {
 .@@@@@@@@.
 @.@.@@@.@."
   assert day4.part_1(input) == 13
-  // assert day4.part_2(input) == 43
+  assert day4.part_2(input) == 43
 }
