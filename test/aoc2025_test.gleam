@@ -1,6 +1,7 @@
 import day1
 import day2
 import day3
+import day4
 import gleeunit
 
 pub fn main() -> Nil {
@@ -38,4 +39,20 @@ pub fn day3_test() {
 818181911112111"
   assert day3.part_1(input) == 357
   assert day3.part_2(input) == 3_121_910_778_619
+}
+
+pub fn day4_test() {
+  let input =
+    "..@@.@@@@.
+@@@.@.@.@@
+@@@@@.@.@@
+@.@@@@..@.
+@@.@@@@.@@
+.@@@@@@@.@
+.@.@.@.@@@
+@.@@@.@@@@
+.@@@@@@@@.
+@.@.@@@.@."
+  assert day4.part_1(input) == 13
+  // assert day4.part_2(input) == 43
 }
