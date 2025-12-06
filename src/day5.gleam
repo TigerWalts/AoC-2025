@@ -75,6 +75,8 @@ fn do_collapse_ranges(ranges: List(Range), into: List(Range)) -> List(Range) {
         [Range(a.start, int.max(a.stop, b.stop)), ..rest],
         into,
       )
+    [a, b, ..rest] if b.start == a.stop + 1 ->
+      do_collapse_ranges([Range(a.start, b.stop), ..rest], into)
     [range, ..rest] -> do_collapse_ranges(rest, [range, ..into])
   }
 }
