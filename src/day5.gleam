@@ -71,17 +71,17 @@ fn collapse_ranges(ranges: List(Range)) -> List(Range) {
 }
 
 fn do_collapse_ranges(ranges: List(Range), into: List(Range)) -> List(Range) {
-  case ranges, into {
-    [], _ -> list.reverse(into)
-    [just_one], into -> do_collapse_ranges([], [just_one, ..into])
-    [Range(a_start, a_stop), Range(b_start, b_stop), ..rest], into
+  case ranges {
+    [] -> list.reverse(into)
+    [just_one] -> do_collapse_ranges([], [just_one, ..into])
+    [Range(a_start, a_stop), Range(b_start, b_stop), ..rest]
       if b_start <= a_stop
     ->
       do_collapse_ranges(
         [Range(a_start, int.max(a_stop, b_stop)), ..rest],
         into,
       )
-    [range, ..rest], into -> do_collapse_ranges(rest, [range, ..into])
+    [range, ..rest] -> do_collapse_ranges(rest, [range, ..into])
   }
 }
 
