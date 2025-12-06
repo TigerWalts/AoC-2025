@@ -3,6 +3,7 @@ import day1
 import day2
 import day3
 import day4
+import day5
 import gleam/int
 import gleam/io
 import simplifile
@@ -17,6 +18,8 @@ pub fn main() -> Nil {
     ["day3", "part2", filepath] -> get_file_content(filepath) |> day3.part_2
     ["day4", "part1", filepath] -> get_file_content(filepath) |> day4.part_1
     ["day4", "part2", filepath] -> get_file_content(filepath) |> day4.part_2
+    ["day5", "part1", filepath] -> get_file_content(filepath) |> day5.part_1
+    ["day5", "part2", filepath] -> get_file_content(filepath) |> day5.part_2
     _ -> panic as "Unknown commands"
   }
   |> int.to_string
