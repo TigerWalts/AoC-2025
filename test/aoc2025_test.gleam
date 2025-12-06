@@ -3,6 +3,7 @@ import day2
 import day3
 import day4
 import day5
+import day6
 import gleeunit
 
 pub fn main() -> Nil {
@@ -73,4 +74,10 @@ pub fn day5_test() {
 32"
   assert day5.part_1(input) == 3
   assert day5.part_2(input) == 14
+}
+
+pub fn day6_test() {
+  let input = "./input/day6_example.txt"
+  assert day6.part_1(input) == 4_277_556
+  assert day6.part_2(input) == 3_263_827
 }
