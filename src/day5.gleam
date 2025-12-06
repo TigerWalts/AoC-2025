@@ -21,7 +21,7 @@ pub fn part_1(input: String) -> Int {
 pub fn part_2(input: String) -> Int {
   let #(ranges, _) = parse(input)
   collapse_ranges(ranges)
-  |> count_possible_ids_in_collapsed_ranges
+  |> list.fold(0, fn(acc, range) { 1 + acc + range.stop - range.start })
 }
 
 fn parse(input: String) -> #(List(Range), List(Int)) {
@@ -62,11 +62,7 @@ fn do_parse(
 }
 
 fn collapse_ranges(ranges: List(Range)) -> List(Range) {
-  list.sort(ranges, by: fn(a, b) {
-    let Range(a, _) = a
-    let Range(b, _) = b
-    int.compare(a, b)
-  })
+  list.sort(ranges, by: fn(a, b) { int.compare(a.start, b.start) })
   |> do_collapse_ranges([])
 }
 
@@ -74,11 +70,9 @@ fn do_collapse_ranges(ranges: List(Range), into: List(Range)) -> List(Range) {
   case ranges {
     [] -> list.reverse(into)
     [just_one] -> do_collapse_ranges([], [just_one, ..into])
-    [Range(a_start, a_stop), Range(b_start, b_stop), ..rest]
-      if b_start <= a_stop
-    ->
+    [a, b, ..rest] if b.start <= a.stop ->
       do_collapse_ranges(
-        [Range(a_start, int.max(a_stop, b_stop)), ..rest],
+        [Range(a.start, int.max(a.stop, b.stop)), ..rest],
         into,
       )
     [range, ..rest] -> do_collapse_ranges(rest, [range, ..into])
@@ -91,11 +85,4 @@ fn count_ids_in_ranges(ids: List(Int), ranges: List(Range)) -> Int {
 
 fn id_in_ranges(id: Int, ranges: List(Range)) -> Bool {
   list.any(ranges, fn(range) { bool.and(id >= range.start, id <= range.stop) })
-}
-
-fn count_possible_ids_in_collapsed_ranges(ranges: List(Range)) -> Int {
-  list.fold(ranges, 0, fn(acc, range) {
-    let Range(start, stop) = range
-    1 + acc + stop - start
-  })
 }
