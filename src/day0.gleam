@@ -1,11 +1,10 @@
-pub fn part_1(input: String) -> Int {
-  todo
+pub fn part_1(_input: String) -> Int {
+  0
 }
 
-pub fn part_2(input: String) -> Int {
-  todo
+pub fn part_2(_input: String) -> Int {
+  0
 }
-
-fn parse(input: String) -> a {
-  todo
-}
+// fn parse(_input: String) -> List(a) {
+//   []
+// }

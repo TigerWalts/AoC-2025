@@ -19,7 +19,7 @@ pub fn part_1(input: String) -> Int {
 
 pub fn part_2(input: String) -> Int {
   let assert [first, ..rows] = parse(input)
-  process_2(rows, first, 1)
+  process_2(rows, first)
 }
 
 fn parse(input: String) -> List(List(Tile)) {
@@ -33,7 +33,11 @@ fn parse_line(line: String, acc: List(Tile)) -> List(Tile) {
     "." <> rest -> parse_line(rest, [Air(0), ..acc])
     "S" <> rest -> parse_line(rest, [Source(1), ..acc])
     "^" <> rest -> parse_line(rest, [Prism(0), ..acc])
-    _ -> panic as { "Invalid next character: " <> line }
+    _ ->
+      panic as case string.pop_grapheme(line) {
+          Ok(#(char, _)) -> "Unexpected character: " <> char
+          Error(_) -> "Unexpected character at head of text: " <> line
+        }
   }
 }
 
@@ -47,7 +51,7 @@ fn process_1(rows: List(List(Tile)), prev: List(Tile), count: Int) -> Int {
   }
 }
 
-fn process_2(rows: List(List(Tile)), prev: List(Tile), count: Int) -> Int {
+fn process_2(rows: List(List(Tile)), prev: List(Tile)) -> Int {
   case rows {
     [] ->
       list.fold(prev, 0, fn(acc, tile) {
@@ -58,7 +62,7 @@ fn process_2(rows: List(List(Tile)), prev: List(Tile), count: Int) -> Int {
       })
     [next, ..rest] -> {
       let #(new_prev, _) = propogate(prev, next)
-      process_2(rest, new_prev, count)
+      process_2(rest, new_prev)
     }
   }
 }
@@ -83,24 +87,14 @@ fn propogate(prev: List(Tile), next: List(Tile)) -> #(List(Tile), Int) {
           }
       }
     })
-  let last_idx = list.length(illuminated_next) - 1
   let #(split_count, spread_ids) =
     list.index_fold(illuminated_next, #(0, dict.new()), fn(acc, tile, idx) {
-      case acc, tile, idx == 0, idx == last_idx {
-        #(count, ids), ActivePrism(_), True, True -> #(count + 1, ids)
-        #(count, ids), ActivePrism(t), True, False -> #(
-          count + 1,
-          update_ids(ids, idx + 1, t),
-        )
-        #(count, ids), ActivePrism(t), False, True -> #(
-          count + 1,
-          update_ids(ids, idx - 1, t),
-        )
-        #(count, ids), ActivePrism(t), False, False -> #(
+      case acc, tile {
+        #(count, ids), ActivePrism(t) -> #(
           count + 1,
           ids |> update_ids(idx - 1, t) |> update_ids(idx + 1, t),
         )
-        acc, _, _, _ -> acc
+        acc, _ -> acc
       }
     })
   let spread_next =
