@@ -6,6 +6,7 @@ import day5
 import day6
 import day7
 import day8
+import day9
 import gleeunit
 
 pub fn main() -> Nil {
@@ -130,4 +131,18 @@ pub fn day8_test() {
 425,690,689"
   assert day8.part_1(input, "10") == 40
   assert day8.part_2(input) == 25_272
+}
+
+pub fn day9_test() {
+  let input =
+    "7,1
+11,1
+11,7
+9,7
+9,5
+2,5
+2,3
+7,3"
+  assert day9.part_1(input) == 50
+  assert day9.part_2(input) == 24
 }
